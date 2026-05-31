@@ -1,0 +1,148 @@
+appId: com.neopen.activebreakclock
+productName: 别坐了
+copyright: Copyright © 2026 neopen
+
+# 仅保留中文语言包（合法数组语法）
+electronLanguages:
+  - zh-CN
+
+extraResources:
+  - 'src/renderer/icons/**/*'
+
+directories:
+  output: release
+
+# 严格白名单（合法列表语法）
+files:
+  - 'dist/main/**/*'
+  - 'dist/preload/**/*'
+  - 'dist/renderer/**/*'
+  - '!dist/**/*.map'
+  - '!**/*.log'
+  - '!**/*.md'
+  - '!**/*.ts'
+  - '!**/*.po'
+  - '!**/*.mo'
+  - '!**/*.test.js'
+  - '!**/*.spec.js'
+  - '!**/docs/**/*'
+  - '!**/scripts/**/*'
+  - '!**/test/**/*'
+  - '!**/imgs/**/*'
+  - '!**/node_modules/**/*'
+  - '!**/.storage/**/*'
+  - '!**/.tmp/**/*'
+
+# ========== Windows 配置 ==========
+win:
+  target:
+    - nsis
+    - portable
+  icon: src/renderer/icons/icon-256.png
+  asar: true
+  asarUnpack: "**/*.node"
+  compression: maximum
+  requestedExecutionLevel: asInvoker
+  publish:
+    - provider: github
+      protocol: https
+    - bitbucket
+
+nsis:
+  oneClick: false
+  perMachine: false
+  allowToChangeInstallationDirectory: true
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
+  shortcutName: 别坐了
+  runAfterFinish: true
+  deleteAppDataOnUninstall: false
+  artifactName: HealthClock-${version}-x64-Setup.${ext}
+
+portable:
+  artifactName: HealthClock-${version}-x64-Portable.${ext}
+  requestExecutionLevel: user
+
+# ========== macOS 配置 ==========
+mac:
+  target:
+    - dmg
+    - zip
+  icon: src/renderer/icons/icon-512.icns
+  category: public.app-category.healthcare-fitness
+#  entitlements: entitlements.mac.plist
+#  entitlements: ./entitlements.mac.plist
+  entitlementsInherit: entitlements.mac.plist
+  gatekeeperAssess: false
+  hardenedRuntime: true
+  asar: true
+  asarUnpack: "**/*.node"
+  artifactName: HealthClock-${version}-${arch}.${ext}
+  # null 表示跳过签名
+  identity: null
+
+# DMG 配置
+dmg:
+  title: "别坐了-${version}"
+  icon: src/renderer/icons/icon-512.icns
+  iconSize: 100
+  contents:
+    - x: 130
+      y: 220
+    - x: 410
+      y: 220
+      type: link
+      path: /Applications
+  window:
+    width: 540
+    height: 380
+
+# ========== Linux 配置 ==========
+linux:
+  target:
+    - deb
+    - rpm
+    - AppImage
+  icon: src/renderer/icons
+  category: Utility
+  executableName: healthclock  # ← 这里指定可执行文件名
+  asar: true
+  asarUnpack: "**/*.node"
+  artifactName: HealthClock-${version}-${arch}.${ext}
+  # desktop 配置只保留桌面文件相关内容，不要包含 Exec
+  desktop:
+    entry:
+      Name: 别坐了
+      Comment: 健康提醒应用，帮你打破久坐循环
+      Type: Application
+      Categories: Utility;Health;
+      # Exec 和 Icon 会自动从 executableName 和 icon 配置生成，不要手动指定
+      Terminal: false
+    desktopActions: []
+
+# AppImage 配置
+appImage:
+  artifactName: HealthClock-${version}-${arch}.AppImage
+  description: 健康提醒应用，帮你打破久坐循环
+  category: Utility
+
+# Debian 包配置
+deb:
+  artifactName: HealthClock-${version}-${arch}.deb
+  depends:
+    - libnotify-bin
+    - libgtk-3-0
+  priority: optional
+  maintainer: neopen <helpenx+clock@gmail.com>
+  packageCategory: utils
+  vendor: neopen
+
+# RPM 包配置
+rpm:
+  artifactName: HealthClock-${version}-${arch}.rpm
+  depends:
+    - libnotify
+    - gtk3
+  maintainer: neopen <helpenx+clock@gmail.com>
+  packageCategory: Utilities
+  vendor: neopen

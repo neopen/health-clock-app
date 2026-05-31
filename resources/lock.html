@@ -42,15 +42,60 @@
             bottom: 0;
         }
 
+        /* 背景动图样式 */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .bg-animation img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.15;
+            animation: slowZoom 20s ease-in-out infinite alternate;
+        }
+
+        @keyframes slowZoom {
+            0% {
+                transform: scale(1);
+            }
+            100% {
+                transform: scale(1.1);
+            }
+        }
+
+        /* 背景遮罩 */
+        .bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                135deg,
+                rgba(26, 26, 46, 0.7) 0%,
+                rgba(22, 33, 62, 0.7) 100%
+            );
+            z-index: 2;
+            pointer-events: none;
+        }
+
         .lock-card {
-            background: rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(20px);
             border-radius: 56px;
             padding: 48px 32px;
             margin: 20px;
             width: calc(100% - 40px);
             max-width: 380px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.25);
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
             text-align: center;
             /* 确保居中显示 */
@@ -314,6 +359,16 @@
 </head>
 
 <body>
+    <!-- 背景动图 -->
+    <div class="bg-animation">
+        <!-- <img src="https://media.tenor.com/iYjQ5f3T7Z0AAAAC/exercise-workout.gif"  -->
+        <!-- <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExbHphOWtiNzh5ZW1qNW5iYXBqZ3h3OGxqNjZwNHRmcXJidHRsOGgxYyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3o7TKP6jNidiaoHCQU/giphy.gif"  -->
+        <img src="../../assets/exercise-Instruction.webp" 
+             alt="Stretching Exercise"
+             onerror="this.style.display='none'">
+    </div>
+    <div class="bg-overlay"></div>
+
     <div class="lock-card">
         <div class="lock-icon">🧘</div>
         <div class="lock-title">该活动啦！</div>
@@ -458,9 +513,13 @@
                 });
             }
 
+            function closeLockWindow(isAutoClose = true) {
+                if (isClosed) {
+                    console.log('[LOCK] Already closed, skipping');
+                    return;
+                }
 
-            async function closeLockWindow() {
-                if (isClosed) return;
+                console.log('[LOCK] closeLockWindow called, isAutoClose:', isAutoClose);
                 isClosed = true;
 
                 console.log('[LOCK] ========== closeLockWindow START ==========');
@@ -473,13 +532,16 @@
                 // 关键：使用 broadcast 而不是 dispatch
                 if (typeof Neutralino !== 'undefined' && Neutralino.events) {
                     try {
-                        // 1. 向主进程发送停止音频指令
-                        await Neutralino.events.dispatch('stop-sound', {});
-                        // 2. 向主进程发送锁屏关闭指令
-                        await Neutralino.events.dispatch('lock-complete', {});
-                        console.log('[Lock] Events dispatched successfully');
-                    } catch (err) {
-                        console.error('[Lock] Event dispatch failed:', err);
+                        const { ipcRenderer } = window.require('electron');
+                        if (isAutoClose) {
+                            console.log('[LOCK] Sending lock-complete to main process');
+                            ipcRenderer.send('lock-complete');
+                        } else {
+                            console.log('[LOCK] Sending hide-lock to main process');
+                            ipcRenderer.send('hide-lock');
+                        }
+                    } catch (e) {
+                        console.error('[LOCK] Failed to send close signal:', e);
                     }
                 }
 
@@ -527,7 +589,7 @@
                             timerInterval = null;
                         }
                         if (countdownSpan) countdownSpan.innerText = '0';
-                        closeLockWindow();
+                        closeLockWindow(true); // 自动关闭（倒计时完成）
                     } else {
                         currentSeconds--;
                         updateDisplay();
@@ -548,17 +610,17 @@
                 if (currentSeconds > 0) {
                     const confirmed = await showConfirmDialog({
                         title: '提前结束提醒',
-                        message: '活动时间还没到，提前结束可能会影响健康习惯。<br>确定要提前结束吗？',
+                        message: '活动时间还没到。<br>提前结束会影响健康习惯的！<br>确定要提前结束吗？',
                         confirmText: '提前结束',
                         cancelText: '继续活动',
                         confirmColor: '#f59e0b'
                     });
 
                     if (confirmed) {
-                        closeLockWindow();
+                        closeLockWindow(false); // 手动关闭
                     }
                 } else {
-                    closeLockWindow();
+                    closeLockWindow(true); // 自动关闭（倒计时已完成）
                 }
             }
 
@@ -584,19 +646,46 @@
             // 开始倒计时
             startCountdown();
 
-            // 阻止键盘关闭
+            // 阻止所有键盘按键事件，除了音量键
+            // 音量键列表
+            const volumeKeys = ['VolumeUp', 'VolumeDown', 'VolumeMute', 'AudioVolumeUp', 'AudioVolumeDown', 'AudioVolumeMute'];
+
             document.addEventListener('keydown', (e) => {
-                const blockedKeys = ['Escape', 'F11', 'F5', 'F12', 'Alt', 'Control', 'Meta', 'AltGraph'];
-                if (blockedKeys.includes(e.key) ||
-                    (e.ctrlKey && e.key === 'w') ||
-                    (e.metaKey && e.key === 'w') ||
-                    (e.ctrlKey && e.key === 'r') ||
-                    (e.altKey && e.key === 'F4')) {
-                    console.log('[LOCK] Prevented key:', e.key);
+                console.log('[LOCK] keydown event:', e.key);
+
+                // 允许音量键通过
+                if (volumeKeys.includes(e.key)) {
+                    console.log('[LOCK] Volume key allowed:', e.key);
+                    return true;
+                }
+
+                // 阻止所有其他按键
+                console.log('[LOCK] Prevented key:', e.key);
+                e.preventDefault();
+                return false;
+            });
+
+            document.addEventListener('keyup', (e) => {
+                // 允许音量键通过
+                if (volumeKeys.includes(e.key)) {
+                    console.log('[LOCK] Volume up key allowed:', e.key);
+                    return true;
+                }
+
+                // 阻止所有其他按键
+                console.log('[LOCK] Prevented keyup:', e.key);
+                e.preventDefault();
+                return false;
+            });
+
+            // 额外防护：阻止常见的辅助键组合
+            document.addEventListener('keydown', (e) => {
+                // 阻止任何包含 Alt、Ctrl、Meta、Shift 的组合键
+                if (e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) {
                     e.preventDefault();
                     return false;
                 }
-            });
+            }, { capture: true });
 
             console.log('[LOCK] Lock screen ready, will close after', currentSeconds, 'seconds');
         })();

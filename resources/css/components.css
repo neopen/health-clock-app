@@ -1,60 +1,114 @@
 .card {
     background: #f8fafc;
     border-radius: 24px;
-    padding: 20px;
-    margin-bottom: 20px;
+    padding: 24px;
+    margin-bottom: 24px;
     border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
 }
 
 .card-title {
     font-weight: 600;
     font-size: 18px;
     color: #1e293b;
-    margin-bottom: 16px;
+    margin-bottom: 20px;
     display: flex;
+    justify-content: space-between;
     align-items: center;
-    gap: 8px;
+    cursor: pointer;
+    transition: color 0.2s ease, transform 0.1s ease;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.card-title:hover {
+    color: #667eea;
+}
+
+.collapse-icon {
+    font-size: 12px;
+    color: #94a3b8;
+    transition: transform 0.2s ease, color 0.2s ease;
+    margin-left: 12px;
+}
+
+.card-title:hover .collapse-icon {
+    color: #667eea;
+    transform: scale(1.1);
 }
 
 .time-row {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 16px;
     flex-wrap: wrap;
-    margin-bottom: 16px;
+    margin-bottom: 24px;
+    padding: 16px;
+    background: white;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
 }
 
 .time-input {
     flex: 1;
     background: white;
     border: 1px solid #cbd5e1;
-    border-radius: 16px;
+    border-radius: 12px;
     padding: 12px 16px;
     font-size: 16px;
     font-family: monospace;
     font-weight: 500;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .time-input:focus {
     outline: none;
     border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* 分割线样式 */
+.section-divider {
+    height: 1px;
+    background: #e2e8f0;
+    margin: 24px 0;
+    width: 100%;
+}
+
+/* 子设置区域样式 */
+.sub-section {
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid #e2e8f0;
+}
+
+.sub-section:first-child {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
 }
 
 .settings-row {
     display: flex;
-    gap: 12px;
+    gap: 16px;
     flex-wrap: wrap;
+    margin-bottom: 16px;
 }
 
 .settings-item {
     flex: 1;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     background: #f1f5f9;
-    padding: 8px 14px;
-    border-radius: 20px;
+    padding: 12px 16px;
+    border-radius: 12px;
     min-width: 140px;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.settings-item:hover {
+    background: #e2e8f0;
 }
 
 .settings-item-full {
@@ -75,11 +129,18 @@
 .settings-input {
     background: white;
     border: 1px solid #cbd5e1;
-    border-radius: 14px;
-    padding: 8px 8px;
+    border-radius: 8px;
+    padding: 8px 12px;
     font-size: 15px;
-    width: 70px;
+    width: 80px;
     text-align: center;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.settings-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
 .settings-input[type="number"] {
@@ -98,12 +159,16 @@
 .test-notify-btn {
     background: #e2e8f0;
     border: none;
-    padding: 6px 12px;
+    padding: 8px 16px;
     border-radius: 20px;
     font-size: 12px;
     cursor: pointer;
     color: #475569;
     transition: all 0.2s;
+}
+
+.test-notify-btn:hover {
+    background: #cbd5e1;
 }
 
 .test-notify-btn:active {
@@ -126,9 +191,11 @@
 .warning-note {
     font-size: 12px;
     color: #64748b;
-    margin-top: 10px;
-    padding: 8px 16px;
+    margin-top: 2px;
+    padding: 5px 12px;
     border-top: 1px solid #e2e8f0;
+    background: #f8fafc;
+    border-radius: 8px;
 }
 
 .toggle-switch {
@@ -166,6 +233,7 @@
     background-color: white;
     transition: 0.3s;
     border-radius: 50%;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
 input:checked+.slider {
@@ -179,7 +247,7 @@ input:checked+.slider:before {
 .btn {
     width: 100%;
     padding: 16px;
-    margin-top: 10px;
+    margin-top: 16px;
     border: none;
     border-radius: 40px;
     font-size: 18px;
@@ -191,32 +259,50 @@ input:checked+.slider:before {
 .btn-primary {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
 }
 
 .btn-primary:active {
-    transform: scale(0.97);
+    transform: scale(0.97) translateY(0);
 }
 
 .btn-primary:disabled {
     opacity: 0.6;
     cursor: not-allowed;
     transform: none;
+    box-shadow: none;
 }
 
 .btn-danger {
     background: #ef4444;
     color: white;
-    margin-top: 12px;
+    margin-top: 16px;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.btn-danger:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(239, 68, 68, 0.4);
+}
+
+.btn-danger:active {
+    transform: scale(0.97) translateY(0);
 }
 
 .status-badge {
     background: #e2e8f0;
     border-radius: 40px;
-    padding: 8px 16px;
+    padding: 10px 20px;
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
     font-size: 14px;
     font-weight: 500;
+    transition: all 0.2s ease;
 }
 
 .status-active {
@@ -231,12 +317,13 @@ input:checked+.slider:before {
 
 .next-reminder {
     background: #ede9fe;
-    border-radius: 20px;
-    padding: 12px;
+    border-radius: 12px;
+    padding: 16px;
     text-align: center;
     font-size: 14px;
     color: #5b21b6;
-    margin-top: 16px;
+    margin-top: 20px;
+    border: 1px solid #ddd6fe;
 }
 
 
@@ -245,12 +332,12 @@ input:checked+.slider:before {
     display: flex;
     gap: 12px;
     flex-wrap: wrap;
-    margin-bottom: 12px;
+    margin-bottom: 16px;
 }
 
 .data-btn {
     flex: 1;
-    padding: 10px 16px;
+    padding: 12px 20px;
     border: none;
     border-radius: 20px;
     font-size: 14px;
@@ -260,15 +347,27 @@ input:checked+.slider:before {
     text-align: center;
     background: #f1f5f9;
     color: #1e293b;
+    min-width: 120px;
+}
+
+.data-btn:hover {
+    background: #e2e8f0;
+    transform: translateY(-1px);
 }
 
 .data-btn:active {
-    transform: scale(0.97);
+    transform: scale(0.97) translateY(0);
 }
 
 .export-btn {
     background: #22c55e;
     color: white;
+    box-shadow: 0 2px 8px rgba(34, 197, 94, 0.3);
+}
+
+.export-btn:hover {
+    background: #16a34a;
+    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);
 }
 
 .import-btn {
@@ -278,11 +377,23 @@ input:checked+.slider:before {
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+}
+
+.import-btn:hover {
+    background: #2563eb;
+    box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
 }
 
 .auto-backup-btn {
     background: #8b5cf6;
     color: white;
+    box-shadow: 0 2px 8px rgba(139, 92, 246, 0.3);
+}
+
+.auto-backup-btn:hover {
+    background: #7c3aed;
+    box-shadow: 0 4px 12px rgba(139, 92, 246, 0.4);
 }
 
 .auto-backup-btn.active {
@@ -294,12 +405,14 @@ input:checked+.slider:before {
     color: #64748b;
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 6px;
+    margin-top: 12px;
 }
 
 .backup-hint {
     font-size: 11px;
     color: #94a3b8;
+    margin-top: 4px;
 }
 
 /* 通知方式 - 同一行显示 */
@@ -307,6 +420,7 @@ input:checked+.slider:before {
     display: flex;
     justify-content: space-between;
     gap: 16px;
+    margin-bottom: 16px;
 }
 
 .notification-option {
@@ -314,27 +428,30 @@ input:checked+.slider:before {
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 12px 16px;
+    padding: 16px 20px;
     background: #f8fafc;
     border-radius: 12px;
     border: 1px solid #e2e8f0;
     transition: all 0.2s ease;
+    cursor: pointer;
 }
 
 .notification-option:hover {
     background: #f1f5f9;
     border-color: #cbd5e1;
+    transform: translateY(-1px);
 }
 
 /* 选中状态 */
 .notification-option:has(input:checked) {
     background: #eef2ff;
     border-color: #667eea;
+    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.15);
 }
 
 .notification-option .settings-icon {
     font-size: 20px;
-    margin-right: 8px;
+    margin-right: 12px;
 }
 
 .notification-option span:not(.settings-icon) {
@@ -347,12 +464,12 @@ input:checked+.slider:before {
 @media (max-width: 480px) {
     .notification-type-row {
         flex-direction: column;
-        gap: 10px;
+        gap: 12px;
     }
 
     .notification-option {
         justify-content: flex-start;
-        padding: 10px 16px;
+        padding: 12px 16px;
     }
 }
 
@@ -401,82 +518,103 @@ input:checked+.slider:before {
 
 /* 提示文字样式 */
 .settings-hint {
-    padding: 15px 16px;
+    padding: 16px 20px;
     font-size: 13px;
     color: #64748b;
     background: #f8fafc;
     border-radius: 10px;
-    margin-top: 12px;
+    margin-top: 16px;
     border-left: 3px solid #667eea;
+    line-height: 1.5;
 }
 
 .settings-hint span {
     display: block;
-    line-height: 1.5;
 }
 
 /* 锁屏设置区域 - 平滑显示/隐藏 */
-#lockSettingsTitle,
 #lockSettingsContent {
-    transition: opacity 0.2s ease;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid #e2e8f0;
 }
 
-#lockSettingsTitle[style*="display: none"],
 #lockSettingsContent[style*="display: none"] {
     opacity: 0;
+    transform: translateY(-10px);
 }
 
-#lockSettingsTitle[style*="display: block"],
 #lockSettingsContent[style*="display: block"] {
     opacity: 1;
+    transform: translateY(0);
 }
 
 
 /* 免打扰样式 */
 .breaks-list {
-    margin-top: 8px;
+    margin-top: 16px;
 }
 
 .break-item {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
     background: #f1f5f9;
-    padding: 8px 12px;
-    border-radius: 16px;
-    margin-bottom: 8px;
+    padding: 12px 16px;
+    border-radius: 12px;
+    margin-bottom: 12px;
     flex-wrap: wrap;
+    transition: background-color 0.2s ease;
+}
+
+.break-item:hover {
+    background: #e2e8f0;
 }
 
 .break-item input {
     background: white;
     border: 1px solid #cbd5e1;
-    border-radius: 12px;
-    padding: 6px 8px;
+    border-radius: 8px;
+    padding: 8px 10px;
     font-size: 13px;
+    transition: border-color 0.2s ease;
+}
+
+.break-item input:focus {
+    outline: none;
+    border-color: #667eea;
 }
 
 .break-item .break-name {
     flex: 1;
-    min-width: 60px;
+    min-width: 80px;
 }
 
 .break-item .break-start,
 .break-item .break-end {
-    width: 85px;
+    width: 90px;
 }
 
 .break-item .remove-break {
     background: #ef4444;
     border: none;
     color: white;
-    width: 28px;
-    height: 28px;
+    width: 32px;
+    height: 32px;
     border-radius: 50%;
     cursor: pointer;
     font-size: 16px;
     transition: all 0.2s;
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.break-item .remove-break:hover {
+    background: #dc2626;
+    transform: scale(1.05);
 }
 
 .break-item .remove-break:active {
@@ -486,12 +624,18 @@ input:checked+.slider:before {
 .add-break-btn {
     background: #667eea;
     border: none;
-    padding: 4px 12px;
+    padding: 6px 16px;
     border-radius: 20px;
     color: white;
     cursor: pointer;
     font-size: 12px;
     margin-left: auto;
+    transition: all 0.2s;
+}
+
+.add-break-btn:hover {
+    background: #5b21b6;
+    transform: translateY(-1px);
 }
 
 .add-break-btn:active {
@@ -502,5 +646,253 @@ input:checked+.slider:before {
     color: #94a3b8;
     font-size: 12px;
     text-align: center;
-    padding: 8px;
+    padding: 16px;
+    background: #f8fafc;
+    border-radius: 8px;
+    margin-top: 8px;
+}
+
+/* 优化整体布局 */
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* 响应式优化 */
+@media (max-width: 768px) {
+    .container {
+        padding: 16px;
+    }
+    
+    .card {
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+    
+    .settings-row {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .settings-item {
+        flex: 100%;
+    }
+}
+
+/* 移动端全面优化 */
+@media (max-width: 480px) {
+    .card {
+        padding: 16px;
+        margin-bottom: 16px;
+        border-radius: 20px;
+    }
+    
+    .card-title {
+        font-size: 16px;
+        margin-bottom: 16px;
+        padding-bottom: 10px;
+    }
+    
+    .time-row {
+        padding: 12px;
+        gap: 12px;
+    }
+    
+    .time-input {
+        font-size: 14px;
+        padding: 10px 12px;
+    }
+    
+    .settings-row {
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 12px;
+    }
+    
+    .settings-item {
+        flex: 100%;
+        min-width: auto;
+        padding: 10px 14px;
+        gap: 10px;
+    }
+    
+    .settings-item span:not(.settings-icon) {
+        font-size: 13px;
+        white-space: normal;
+        word-break: keep-all;
+    }
+    
+    .settings-input {
+        width: 70px;
+        padding: 6px 10px;
+        font-size: 14px;
+    }
+    
+    /* 午休时间段特殊优化 */
+    #lunchBreakSettings {
+        margin-left: 0 !important;
+        margin-top: 10px;
+    }
+    
+    #lunchBreakSettings .settings-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 12px 14px;
+    }
+    
+    #lunchBreakSettings .settings-item > span {
+        font-size: 13px;
+        font-weight: 500;
+        color: #374151;
+    }
+    
+    #lunchBreakSettings .settings-item .time-group {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+        justify-content: space-between;
+    }
+    
+    #lunchBreakSettings .settings-input {
+        width: 100px;
+        flex: 1;
+    }
+    
+    /* 自定义免打扰时段优化 */
+    #customBreaksList {
+        margin-top: 10px;
+    }
+    
+    .break-item {
+        display: flex;
+        align-items: center;
+        flex-wrap: nowrap;
+        gap: 8px;
+        padding: 10px 12px;
+    }
+    
+    .break-item .break-name {
+        flex: 0 0 auto;
+        min-width: 50px;
+        width: auto;
+        max-width: 80px;
+        font-size: 12px;
+    }
+    
+    .break-item .break-start,
+    .break-item .break-end {
+        flex: 0 0 auto;
+        width: 70px;
+        font-size: 12px;
+    }
+    
+    .break-item .remove-break {
+        flex-shrink: 0;
+        width: 28px;
+        height: 28px;
+        font-size: 14px;
+        margin-left: auto;
+    }
+    
+    /* 通知方式行优化 */
+    .notification-type-row {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .notification-option {
+        padding: 12px 16px;
+        justify-content: flex-start;
+    }
+    
+    /* 提示文字优化 */
+    .settings-hint {
+        padding: 12px 14px;
+        font-size: 12px;
+        margin-top: 12px;
+    }
+    
+    /* 添加时段按钮优化 */
+    .add-break-btn {
+        padding: 6px 14px;
+        font-size: 12px;
+    }
+    
+    /* 锁屏设置内容优化 */
+    #lockSettingsContent {
+        margin-top: 16px;
+        padding-top: 16px;
+    }
+    
+    /* 统计卡片优化 */
+    .stats-card {
+        padding: 14px 16px;
+        border-radius: 20px;
+    }
+    
+    .stat-value {
+        font-size: 24px;
+    }
+    
+    .stat-label {
+        font-size: 11px;
+    }
+    
+    /* 自定义时段完整行 */
+    .settings-item-full {
+        flex-direction: row;
+        align-items: center;
+        justify-content: flex-start;
+        flex-wrap: nowrap;
+        gap: 8px;
+    }
+    
+    .settings-item-full > .settings-icon {
+        flex-shrink: 0;
+        margin-right: 4px;
+    }
+    
+    .settings-item-full > span:not(.settings-icon) {
+        white-space: nowrap;
+        overflow: visible;
+        text-overflow: clip;
+        flex: 0 0 auto;
+    }
+    
+    .settings-item-full > .toggle-switch {
+        margin-left: auto;
+        flex-shrink: 0;
+    }
+    
+    /* 开关类设置项优化 - 保持图标和文字左对齐 */
+    .settings-item .settings-icon {
+        flex-shrink: 0;
+    }
+    
+    .settings-item > span:not(.settings-icon) {
+        flex: 0 0 auto;
+        white-space: nowrap;
+    }
+}
+
+/* 更小屏幕的额外优化 */
+@media (max-width: 360px) {
+    .card {
+        padding: 14px;
+    }
+    
+    .settings-item {
+        padding: 10px 12px;
+    }
+    
+    .settings-input {
+        width: 65px;
+    }
+    
+    .time-input {
+        padding: 10px;
+    }
 }

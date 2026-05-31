@@ -4,7 +4,7 @@ const path = require('path');
 const SRC_MAIN = path.join(__dirname, '../src/main');
 const DIST_MAIN = path.join(__dirname, '../dist/main');
 
-console.log('📦 Copying main process files...');
+console.log(' Copying main process files...');
 
 // 清空并创建目标目录
 if (fs.existsSync(DIST_MAIN)) {
@@ -25,11 +25,11 @@ function copyDir(src, dest) {
             copyDir(srcPath, destPath);
         } else if (entry.name.endsWith('.js')) {
             fs.copyFileSync(srcPath, destPath);
-            console.log(`  ✅ ${entry.name}`);
+            console.log(`   ${entry.name}`);
         }
     }
 }
 
 copyDir(SRC_MAIN, DIST_MAIN);
 
-console.log('✨ Main process files copied!');
+console.log(' Main process files copied!');

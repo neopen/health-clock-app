@@ -1,18 +1,35 @@
 {
   "name": "HealthClock",
-  "version": "0.6.0",
+  "version": "v0.5.8",
   "description": "一款强制锁屏的健康提醒应用，帮你打破久坐循环，养成定时活动的好习惯。",
   "scripts": {
-    "dev": "neu run",
-    "build": "neu build",
-    "build:win": "neu build --windows",
-    "build:mac": "neu build --macos",
-    "build:linux": "neu build --linux",
-    "clean": "rd /s /q dist release 2>nul & del /f /q package-lock.json 2>nul"
+    "dev": "electron .",
+    "build": "node scripts/js/build.js",
+    "start": "electron .",
+    "dist": "npm run build && npx electron-builder",
+    "dist:win": "npm run build && electron-builder --win --x64",
+    "dist:portable": "npm run build && electron-builder --win --x64 --config.win.target=portable",
+    "dist:win32": "npm run build && electron-builder --win --ia32",
+    "dist:mac": "npm run build && electron-builder --mac",
+    "dist:mac:arm64": "npm run build && electron-builder --mac --arm64",
+    "dist:linux": "npm run build && electron-builder --linux",
+    "dist:all": "npm run build && electron-builder --win --mac --linux",
+    "build:web": "node scripts/js/build-web.js",
+    "clean": "rd /s /q dist release 2>nul || rm -rf dist release",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "scripts-bak": {
+    "start": "electron .",
+    "build": "electron-builder --win --x64",
+    "build:win": "electron-builder --win --x64",
+    "deploy:web": "npm run build:web && node scripts/js/deploy-web.js",
+    "serve:web": "npx serve docs",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "compress": "compress.bat"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/neopen/active-break-clock.git"
+    "url": "git+https://github.com/neopen/break-reminder.git"
   },
   "keywords": [
     "health",
@@ -29,16 +46,25 @@
   "author": {
     "name": "neopen",
     "email": "helpenx+clock@gmail.com",
-    "url": "https://github.com/neopen"
+    "url": "https://github.com/neopen/break-reminder"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/neopen/active-break-clock/issues"
+    "url": "https://github.com/neopen/break-reminder/issues"
   },
-  "homepage": "https://github.com/neopen/active-break-clock#readme",
+  "homepage": "https://clock.pengline.cn",
   "type": "commonjs",
   "devDependencies": {
-    "@neutralinojs/lib": "^6.7.0",
-    "@neutralinojs/neu": "^11.7.1"
+    "electron": "^41.2.0",
+    "electron-builder": "^26.8.1",
+    "electron-vite": "^2.0.0"
+  },
+  "dependencies": {
+    "node-global-key-listener": "^0.3.0",
+    "x11": "^2.3.0"
+  },
+  "optionalDependencies": {
+    "node-global-key-listener": "^0.1.2",
+    "x11": "^2.3.0"
   }
 }

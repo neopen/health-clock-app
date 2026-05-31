@@ -40,11 +40,11 @@ echo ========================================
 echo.
 
 echo [5/3] 重新安装依赖...
-call npm install || (echo ❌ 依赖安装失败！ & pause & exit /b 1)
+call npm install || (echo  依赖安装失败！ & pause & exit /b 1)
 echo 完成
 echo.
 
 echo ========================================
-echo ✅ 依赖安装完成！请查看 node_modules 目录
+echo  依赖安装完成！请查看 node_modules 目录
 echo ========================================
 pause

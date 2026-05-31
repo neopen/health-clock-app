@@ -64,10 +64,20 @@
             </div>
             <div class="status-bar-right">
                 <a href="https://github.com/neopen/active-break-clock/releases" target="_blank" class="download-link"
-                    rel="noopener noreferrer" title="下载桌面应用">
-                    <span class="download-icon">📦</span>
-                    <span class="download-text">下载桌面版</span>
+                    rel="noopener noreferrer" title="下载最新版桌面应用">
+                    <span class="download-icon">📥</span>
+                    <span class="download-text">下载最新版</span>
                 </a>
+            </div>
+        </div>
+
+        <!-- 版本更新提示 -->
+        <div id="updateBanner" class="update-banner hidden">
+            <div class="update-banner-content">
+                <span class="update-icon">🔔</span>
+                <span class="update-text">发现新版本 <span id="updateVersion"></span></span>
+                <a id="updateLink" href="#" target="_blank" class="update-link">立即更新</a>
+                <button id="updateCloseBtn" class="update-close">✕</button>
             </div>
         </div>
 
@@ -96,140 +106,165 @@
 
             <div class="card">
                 <!-- 时间段设置 -->
-                <div class="card-title">🕐 时间段设置</div>
-                <div class="time-row">
-                    <input type="time" id="startTime" class="time-input" value="08:00">
-                    <span>—</span>
-                    <input type="time" id="endTime" class="time-input" value="18:00">
+                <div class="card-title" data-target="timeSettings">
+                    提醒时间段
+                    <span class="collapse-icon">▼</span>
                 </div>
-
-                <!-- 免打扰设置 -->
-                <div class="card-title" style="margin-top: 16px;">😴 免打扰设置</div>
-                <div class="settings-row">
-                    <div class="settings-item settings-item-full">
-                        <span class="settings-icon">🌙</span>
-                        <span>启用免打扰</span>
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="dndToggle">
-                            <span class="slider"></span>
-                        </label>
+                <div class="card-content" id="timeSettings">
+                    <div class="time-row">
+                        <input type="time" id="startTime" class="time-input" value="08:00">
+                        <span>—</span>
+                        <input type="time" id="endTime" class="time-input" value="18:00">
                     </div>
-                </div>
 
-                <!-- 午休时间 -->
-                <div id="lunchBreakSettings" style="margin-top: 12px; margin-left: 8px;">
-                    <div class="settings-row">
-                        <div class="settings-item" style="flex: 2;">
-                            <span>🍜 午休时间</span>
-                            <input type="time" id="lunchStart" class="settings-input" value="12:00"
-                                style="width: 100px;">
-                            <span>—</span>
-                            <input type="time" id="lunchEnd" class="settings-input" value="14:00" style="width: 100px;">
+                    <!-- 提醒设置 -->
+                    <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #e2e8f0;">
+                        <div class="settings-row">
+                            <div class="settings-item">
+                                <span>每间隔</span>
+                                <input type="number" id="intervalMinutes" class="settings-input" value="40" min="10" max="300"
+                                    step="5">
+                                <span>分钟</span>
+                            </div>
+                            <div class="settings-item">
+                                <span>启用免打扰</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="dndToggle">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div id="intervalError" class="error-hint hidden"></div>
+                    </div>
+
+                    <!-- 免打扰设置 -->
+                    <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #e2e8f0;">
+
+                        <!-- 午休时间 -->
+                    <div id="lunchBreakSettings" style="margin-top: 12px; margin-left: 8px;">
+                        <div class="settings-row">
+                            <div class="settings-item" style="flex: 2;">
+                                <span>午休时间段</span>
+                                <div class="time-group">
+                                    <input type="time" id="lunchStart" class="settings-input" value="12:00" style="width: 120px;">
+                                    <span>—</span>
+                                    <input type="time" id="lunchEnd" class="settings-input" value="14:00" style="width: 120px;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                        <!-- 自定义免打扰时段 -->
+                        <div style="margin-top: 12px;">
+                            <div class="settings-row">
+                                <div class="settings-item settings-item-full" style="justify-content: space-between;">
+                                    <span>自定义免打扰时段（5个）</span>
+                                    <button class="add-break-btn" id="addBreakBtn"
+                                        style="background: #667eea; border: none; padding: 4px 12px; border-radius: 20px; color: white; cursor: pointer;">+  添加</button>
+                                </div>
+                            </div>
+                            <div id="customBreaksList" class="breaks-list" style="margin-top: 8px;"></div>
                         </div>
                     </div>
                 </div>
-
-                <!-- 自定义免打扰时段 -->
-                <div style="margin-top: 12px;">
-                    <div class="settings-row">
-                        <div class="settings-item settings-item-full" style="justify-content: space-between;">
-                            <span class="settings-icon">📅</span>
-                            <span>自定义时段</span>
-                            <button class="add-break-btn" id="addBreakBtn"
-                                style="background: #667eea; border: none; padding: 4px 12px; border-radius: 20px; color: white; cursor: pointer;">+
-                                添加</button>
-                        </div>
-                    </div>
-                    <div id="customBreaksList" class="breaks-list" style="margin-top: 8px;"></div>
-                </div>
-
-                <!-- 提醒设置 -->
-                <div class="card-title" style="margin-top: 16px;">🔁 提醒设置</div>
-                <div class="settings-row">
-                    <div class="settings-item">
-                        <span>间隔</span>
-                        <input type="number" id="intervalMinutes" class="settings-input" value="40" min="1" max="300"
-                            step="1">
-                        <span>分钟</span>
-                    </div>
-                    <div class="settings-item">
-                        <span class="settings-icon">🔊</span>
-                        <span>声音提示</span>
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="soundToggle" checked>
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                </div>
-                <div id="intervalError" class="error-hint hidden"></div>
-
 
                 <!-- 通知设置 -->
-                <div class="card-title" style="margin-top: 16px;">🔔 通知方式</div>
-                <div class="settings-row notification-type-row">
-                    <div class="settings-item notification-option">
-                        <span class="settings-icon">💬</span>
-                        <span>桌面通知</span>
-                        <label class="toggle-switch">
-                            <input type="radio" name="notificationType" id="desktopNotification" value="desktop"
-                                checked>
-                            <span class="slider"></span>
-                        </label>
-                    </div>
-                    <div class="settings-item notification-option">
-                        <span class="settings-icon">🔒</span>
-                        <span>锁屏通知</span>
-                        <label class="toggle-switch">
-                            <input type="radio" name="notificationType" id="lockNotification" value="lock">
-                            <span class="slider"></span>
-                        </label>
-                    </div>
+                <div class="card-title" data-target="notificationSettings">
+                    通知方式
+                    <span class="collapse-icon">▼</span>
                 </div>
-                <div class="settings-hint">
-                    <span id="notificationHint">💡 桌面通知：仅弹窗提醒，不锁屏（需开启系统通知权限）</span>
-                </div>
-
-
-                <!-- 锁屏设置 - 添加 id -->
-                <div class="card-title" style="margin-top: 16px;" id="lockSettingsTitle">🔒 锁屏设置</div>
-                <div id="lockSettingsContent">
+                <div class="card-content" id="notificationSettings">
                     <div class="settings-row">
-                        <div class="settings-item">
-                            <span>锁屏</span>
-                            <input type="number" id="lockMinutes" class="settings-input" value="5" min="1" max="30"
-                                step="1">
-                            <span>分钟</span>
-                        </div>
-                        <div class="settings-item">
-                            <span class="settings-icon">🔒</span>
-                            <span>强制锁屏</span>
+                        <div class="settings-item settings-item-full">
+                            <span class="settings-icon">🔊</span>
+                            <span>开启声音提示</span>
                             <label class="toggle-switch">
-                                <input type="checkbox" id="forceLockToggle">
+                                <input type="checkbox" id="soundToggle" checked>
                                 <span class="slider"></span>
                             </label>
                         </div>
                     </div>
-                    <div id="lockError" class="error-hint hidden"></div>
-                    <div class="warning-note">
-                        ⚠️ 强制锁屏开启后，提醒期间无法关闭，必须等待倒计时结束
+                    <div class="settings-row notification-type-row">
+                        <div class="settings-item notification-option">
+                            <span>桌面通知</span>
+                            <label class="toggle-switch">
+                                <input type="radio" name="notificationType" id="desktopNotification" value="desktop"
+                                    checked>
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="settings-item notification-option">
+                            <span>锁屏通知</span>
+                            <label class="toggle-switch">
+                                <input type="radio" name="notificationType" id="lockNotification" value="lock">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="settings-hint">
+                        <span id="notificationHint">💡 桌面通知：弹窗提醒（需开启系统通知权限）</span>
+                    </div>
+
+                    <!-- 锁屏通知设置 -->
+                    <div id="lockSettingsContent" style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #e2e8f0;">
+                        <div class="settings-row">
+                            <div class="settings-item">
+                                <span>锁屏</span>
+                                <input type="number" id="lockMinutes" class="settings-input" value="5" min="1" max="120"
+                                    step="1">
+                                <span>分钟</span>
+                            </div>
+                            <div class="settings-item">
+                                <span>强制锁屏</span>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="forceLockToggle">
+                                    <span class="slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div id="lockError" class="error-hint hidden"></div>
+                        <div class="warning-note">
+                            ⚠️ 强制锁屏开启后，提醒期间无法关闭，必须等待倒计时结束
+                        </div>
                     </div>
                 </div>
 
                 <!-- 其他设置 -->
-                <div class="card-title" style="margin-top: 16px;">⚙️ 其他设置</div>
-                <div class="settings-row">
-                    <div class="settings-item settings-item-full">
-                        <span class="settings-icon">🖥️</span>
-                        <span>开机自启动</span>
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="autoLaunchToggle">
-                            <span class="slider"></span>
-                        </label>
+                <div class="card-title" data-target="otherSettings" style="margin-top: 16px;">
+                    其他设置
+                    <span class="collapse-icon">▶</span>
+                </div>
+                <div class="card-content hidden" id="otherSettings">
+                    <div class="settings-row">
+                        <div class="settings-item settings-item-full">
+                            <span class="settings-icon">🖥️</span>
+                            <span>开机启动</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="autoLaunchToggle">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="warning-note">
+                            ⚠️ 仅支持安装版，不支持便携版和在线版
+                        </div>
+                    </div>
+                    <div class="settings-row" style="margin-top: 12px;">
+                        <div class="settings-item settings-item-full">
+                            <span class="settings-icon">🔐</span>
+                            <span>系统锁屏</span>
+                            <label class="toggle-switch">
+                                <input type="checkbox" id="systemLockToggle">
+                                <span class="slider"></span>
+                            </label>
+                        </div>
+                        <div class="warning-note">
+                            ⚠️ 倒计时结束后将启动系统锁屏
+                        </div>
                     </div>
                 </div>
 
-                <button class="btn btn-primary" id="startBtn">▶ 启动闹铃</button>
-                <button class="btn btn-danger" id="stopBtn" disabled>⏹️ 停止闹铃</button>
+                <button class="btn btn-primary" id="startBtn">▶ 启动提醒</button>
+                <button class="btn btn-danger" id="stopBtn" disabled>⏹️ 停止提醒</button>
 
                 <div id="nextReminder" class="next-reminder hidden">
                     ⏰ 下次提醒时间: <span id="nextTimeText">--:--:--</span>

@@ -4,9 +4,9 @@ outputs/
 uploads/
 node_modules
 *.egg-info/
-.venv
-.env
-.storage
+.venv/
+.env/
+.storage/
 .tmp/
 data/
 venv/
@@ -14,8 +14,7 @@ temp/
 .git
 .svn
 .pypirc
-package-lock.json
-bin
+bin/
 .settings/
 __pycache__/
 .classpath
