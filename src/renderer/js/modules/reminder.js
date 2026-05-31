@@ -1,7 +1,7 @@
 // 提醒核心逻辑模块
 const ReminderModule = (function () {
     let isRunning = false;
-    let checkInterval = null;
+    let mainIntervalId = null;
     let nextReminderTimestamp = null;
     let currentLockEndTime = null;
     let lockTimerInterval = null;
@@ -420,9 +420,9 @@ const ReminderModule = (function () {
         console.log('[REMINDER] stop called, isRunning:', isRunning, 'isLocked:', isLocked);
         isRunning = false;
 
-        if (checkInterval) {
-            clearInterval(checkInterval);
-            checkInterval = null;
+        if (mainIntervalId) {
+            clearInterval(mainIntervalId);
+            mainIntervalId = null;
         }
 
         // 停止声音
@@ -447,21 +447,6 @@ const ReminderModule = (function () {
 
         // 注意：不要重置 nextReminderTimestamp，否则会导致下一次提醒无法触发
         // nextReminderTimestamp = null;
-    }
-
-    let mainIntervalId = null;
-
-    function setMainInterval(fn, interval) {
-        if (mainIntervalId) clearInterval(mainIntervalId);
-        if (!isRunning) return;
-        mainIntervalId = setInterval(fn, interval);
-    }
-
-    function clearMainInterval() {
-        if (mainIntervalId) {
-            clearInterval(mainIntervalId);
-            mainIntervalId = null;
-        }
     }
 
     function unlock(forceLock) {
@@ -502,9 +487,9 @@ const ReminderModule = (function () {
         console.log('[REMINDER] Timer paused at:', pauseTimestamp);
 
         // 停止检查循环
-        if (checkInterval) {
-            clearInterval(checkInterval);
-            checkInterval = null;
+        if (mainIntervalId) {
+            clearInterval(mainIntervalId);
+            mainIntervalId = null;
         }
 
         // 停止声音
@@ -570,6 +555,10 @@ const ReminderModule = (function () {
         }
         if (pendingLock) {
             console.log('[REMINDER] Check skipped: pending lock');
+            return;
+        }
+        if (isPaused) {
+            console.log('[REMINDER] Check skipped: paused');
             return;
         }
         if (isSystemLocked()) {
@@ -666,8 +655,6 @@ const ReminderModule = (function () {
         trigger,
         start,
         stop,
-        setMainInterval,
-        clearMainInterval,
         startCheckLoop,
         resetLockStates,
         pauseTimer,

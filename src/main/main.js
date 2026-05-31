@@ -126,6 +126,17 @@ if (!gotTheLock) {
     });
 }
 
+app.on('before-quit', () => {
+    console.log('[MAIN] App is about to quit (user quit or system shutdown)');
+    app.quitting = true;
+    // 刷新日志缓冲区
+    if (logWriteTimer) {
+        clearTimeout(logWriteTimer);
+        logWriteTimer = null;
+    }
+    flushLogBuffer();
+});
+
 app.on('window-all-closed', () => {
     console.log('[MAIN] All windows closed');
 });

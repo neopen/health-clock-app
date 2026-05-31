@@ -1,6 +1,6 @@
 {
   "name": "HealthClock",
-  "version": "v0.5.7",
+  "version": "v0.5.8",
   "description": "一款强制锁屏的健康提醒应用，帮你打破久坐循环，养成定时活动的好习惯。",
   "main": "dist/main/main.js",
   "scripts": {

@@ -237,6 +237,31 @@ function initPowerManagement() {
         }
     });
 
+    // 系统即将关机/重启
+    powerMonitor.on('shutdown', () => {
+        console.log('[WindowManager] System is shutting down');
+        // 清理资源：销毁锁屏窗口、停止键盘拦截、暂停计时器
+        if (lockWindow && !lockWindow.isDestroyed()) {
+            try {
+                lockWindow.destroy();
+                lockWindow = null;
+            } catch (error) {
+                console.error('[WindowManager] Error destroying lock window on shutdown:', error);
+            }
+        }
+        if (lockTimer) {
+            clearTimeout(lockTimer);
+            lockTimer = null;
+        }
+        if (keyboardBlocker.isActive()) {
+            keyboardBlocker.stopBlocking();
+        }
+        if (mainWindow && !mainWindow.isDestroyed() && !isSystemPaused) {
+            isSystemPaused = true;
+            mainWindow.webContents.send('pause-reminder');
+        }
+    });
+
     // 周期性检查系统空闲/锁屏状态（作为事件监听的补充）
     let lastIdleState = 'unknown';
     const idleCheckInterval = setInterval(() => {
